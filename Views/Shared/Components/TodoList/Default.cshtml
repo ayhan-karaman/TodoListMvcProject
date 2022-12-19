@@ -1,0 +1,33 @@
+@model TodoListMvc.Models.TodoListViewModel
+
+<!-- This section should be hidden by default and shown when there are todos -->
+	<section hidden="@(Model.Todos.Count < 1)" id="main" class="main">
+
+		<input property="toggleAll" EditTodos(this) id="toggle-all"
+				 class="toggle-all" type="checkbox"
+				 checked="[todoLeft = 0]">
+		<label for="toggle-all" mv-action="set(done, !toggleAll)">
+			Mark all as complete
+		</label>
+		<ul class="todo-list">
+			
+		 @foreach (var todo in Model.Todos)
+         {
+			var selectedcss = todo.IsCompleted ? "completed" : "none";
+			
+
+         <li  class="@selectedcss">
+				<div class="view">
+					
+					<input id="@todo.Id"   onchange="EditTodo(this)" value="@todo.IsCompleted" checked='@todo.IsCompleted' class="toggle" type="checkbox" />
+			
+					<label>@todo.TodoWork</label>
+					<a asp-action="DeleteTodo" asp-route-id="@todo.Id" asp-controller="Home" class="btn destroy"></a>
+				</div>
+			</li>
+         }
+		</ul>
+	</section>
+	<!-- This footer should hidden by default and shown when there are todos -->
+
+   

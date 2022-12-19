@@ -1,0 +1,11 @@
+﻿@model TodoListMvc.Models.Todo
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+
+		<h1>todos</h1>
+		<form asp-controller="Home" asp-action="NewTodo" method="post">
+			<input asp-for="TodoWork" class="new-todo" placeholder="What needs to be done?" autoFocus />
+		</form>
+

@@ -6,43 +6,66 @@
     <title>@ViewData["Title"] - TodoListMvc</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/style.css" />
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">TodoListMvc</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
+<section mv-app="todoapp" class="todoapp"
+			mv-bar="none" mv-storage="local"
+			mv-autosave="3"
+			mv-mode="edit"
+			mv-init="#data">
+	<header class="header">
+		@RenderBody()
+	</header>
+	 @await Component.InvokeAsync("TodoList")
+	<footer hidden="[count(todo) = 0]" class="footer">
+		
+		<meta property="todoDone" content="[count(todo where done)]">
+		<meta property="todoLeft" content="[count(todo where !done)]">
+		
+		<!-- This should be `0 items left` by default -->
+		<span class="todo-count">
+			<strong mv-value="todoLeft">0</strong>
+			[if(todoLeft = 1, 'item', 'items')] left
+		</span>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2022 - TodoListMvc - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
+		<meta property="activeFilter" content="all" mv-storage="none">
+		<ul class="filters">
+			<li>
+				<a class="[if(activeFilter = 'all', 'selected')]"
+					mv-action="set(activeFilter, 'all')">All</a>
+			</li>
+			<li>
+				<a class="[if(activeFilter = 'active', 'selected')]"
+					mv-action="set(activeFilter, 'active')">Active</a>
+			</li>
+			<li>
+				<a class="[if(activeFilter = 'completed', 'selected')]"
+					mv-action="set(activeFilter, 'completed')">Completed</a>
+			</li>
+		</ul>
+		<!-- Hidden if no completed items are left ↓ -->
+		<button hidden="[todoDone = 0]"
+				  class="clear-completed"
+				  mv-action="delete(todo where done)">
+			Clear completed
+		</button>
+	</footer>
+</section>
+<footer class="info">
+	<p>Click to edit a todo</p>
+	<p>Created by <a href="https://d12n.me/">Dmitry Sharabin</a></p>
+	<p>Part of <a href="http://todomvc.com">TodoMVC</a></p>
+</footer>
+
+
+
+
+     </div>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
